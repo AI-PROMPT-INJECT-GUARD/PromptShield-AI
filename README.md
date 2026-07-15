@@ -4,7 +4,7 @@
 
 ### Team Members
 - Sharwari Mishra
-- <Friend Name>
+- Aaradhya Soam
 
 ## Project Overview
 
