@@ -1,4 +1,4 @@
-# PromptShield AI
+# AI-PROMPT-INJECT-GUARD
 
 ## AI-Powered Prompt Injection Detection and Defense System
 
