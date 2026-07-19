@@ -27,3 +27,10 @@ env/
 
 # Database
 *.
+results/
+__pycache__/
+*.pyc
+.venv/
+venv/
+saved_model/
+results/
