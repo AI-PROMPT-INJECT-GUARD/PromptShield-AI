@@ -27,3 +27,8 @@ PromptShield AI is an AI-powered web application that detects Prompt Injection a
 - Transformers
 - Scikit-learn
 - Git & GitHub
+
+## Live Deployment
+
+- Backend API : https://promptshield-ai.onrender.com/docs
+- Swagger UI docs available at the link above
