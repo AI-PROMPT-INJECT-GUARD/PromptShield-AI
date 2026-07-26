@@ -4,37 +4,39 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual Environment
+# Virtual environments
 venv/
 .venv/
 env/
 
-# Environment Variables
+# Environment files
 .env
 
-# VS Code
+# Editor files
 .vscode/
-
-# macOS
 .DS_Store
 
 # Logs
 *.log
 
-# Model Files
+# Model files
 *.pt
 *.pth
+
+# Training outputs
+results/
+
+# Saved model artifacts
+saved_model/*
+!saved_model/metadata.json
+!saved_model/evaluation_report.json
+!saved_model/promptshield_model.joblib
+
+# Model archives
 saved_model.zip
 
 # Database
-*.
-results/
-__pycache__/
-*.pyc
-.venv/
-venv/
-saved_model/
-results/
+*.db
 
 # Local datasets and generated artifacts
 dataset/pi_dataset/

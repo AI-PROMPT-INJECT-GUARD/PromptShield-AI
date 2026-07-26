@@ -1,0 +1,52 @@
+{
+  "records_before_dedup": 5632,
+  "records_after_dedup": 5581,
+  "conflicting_texts_removed": 0,
+  "train_size": 4436,
+  "validation_size": 554,
+  "test_size": 555,
+  "benchmark_size": 36,
+  "label_distribution": {
+    "full": {
+      "0": 4750,
+      "1": 831
+    },
+    "train": {
+      "0": 3779,
+      "1": 657
+    },
+    "validation": {
+      "0": 472,
+      "1": 82
+    },
+    "test": {
+      "0": 473,
+      "1": 82
+    },
+    "benchmark": {
+      "0": 26,
+      "1": 10
+    }
+  },
+  "source_distribution": {
+    "raw_benign_train": 1741,
+    "alpaca_safe": 1200,
+    "shomi_injection_train": 517,
+    "shomi_safe_train": 499,
+    "raw_benign_validation": 407,
+    "raw_benign_test": 390,
+    "pi_safe": 343,
+    "raw_injection_filtered_train": 72,
+    "shomi_safe_test": 68,
+    "shomi_safe_validation": 65,
+    "shomi_injection_validation": 63,
+    "prompt_injection_only": 62,
+    "shomi_injection_test": 60,
+    "raw_injection_filtered_test": 27,
+    "handcrafted_safe_train": 23,
+    "raw_injection_filtered_validation": 14,
+    "handcrafted_hard_negative": 14,
+    "handcrafted_injection_train": 10,
+    "pi_injection_filtered": 6
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "validation": {
+    "split": "validation",
+    "threshold": 0.85,
+    "accuracy": 0.9963898916967509,
+    "precision": 1.0,
+    "recall": 0.975609756097561,
+    "f1": 0.9876543209876543,
+    "pr_auc": 0.994428035237518,
+    "false_positive_rate": 0.0,
+    "confusion_matrix": {
+      "tn": 472,
+      "fp": 0,
+      "fn": 2,
+      "tp": 80
+    }
+  },
+  "test": {
+    "split": "test",
+    "threshold": 0.85,
+    "accuracy": 0.9927927927927928,
+    "precision": 1.0,
+    "recall": 0.9512195121951219,
+    "f1": 0.975,
+    "pr_auc": 1.0,
+    "false_positive_rate": 0.0,
+    "confusion_matrix": {
+      "tn": 473,
+      "fp": 0,
+      "fn": 4,
+      "tp": 78
+    }
+  },
+  "benchmark": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "false_positive_rate": 0.0,
+    "confusion_matrix": {
+      "tn": 26,
+      "fp": 0,
+      "fn": 0,
+      "tp": 10
+    },
+    "safe_false_positives": [],
+    "false_negatives": []
+  }
+}
