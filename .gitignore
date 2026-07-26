@@ -4,33 +4,35 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Virtual Environment
+# Virtual environments
 venv/
 .venv/
 env/
 
-# Environment Variables
+# Environment files
 .env
 
-# VS Code
+# Editor files
 .vscode/
-
-# macOS
 .DS_Store
 
 # Logs
 *.log
 
-# Model Files
-*.pt
-*.pth
+# Training outputs
+results/
 
-# Database
-*.
-results/
-__pycache__/
-*.pyc
-.venv/
-venv/
-saved_model/
-results/
+# Legacy / large model artifacts
+saved_model/*
+!saved_model/metadata.json
+!saved_model/evaluation_report.json
+!saved_model/promptshield_model.joblib
+
+# Legacy archives
+saved_model.zip
+
+# Generated datasets not needed in commits by default
+dataset/pi_dataset/
+dataset/shomi_dataset/
+dataset/safe_prompts.csv
+dataset/processed/train_balanced.csv

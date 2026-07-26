@@ -1,46 +1,33 @@
-import torch
-import torch.nn.functional as F
-from transformers import (
-    DistilBertTokenizer,
-    DistilBertForSequenceClassification
-)
-# Load tokenizer
-tokenizer = DistilBertTokenizer.from_pretrained("./saved_model")
+import argparse
+import json
 
-# Load trained model
-model = DistilBertForSequenceClassification.from_pretrained("./saved_model")
+from predictor import PromptInjectionPredictor
 
-# Put model in evaluation mode
-model.eval()
 
-print("Model loaded successfully!")
+def main() -> None:
+    parser = argparse.ArgumentParser(description="PromptShield AI predictor")
+    parser.add_argument("--text", type=str, help="Prompt text to classify")
+    parser.add_argument("--model-dir", type=str, default="saved_model", help="Directory containing the saved model")
+    args = parser.parse_args()
 
-# Take input from the user
-text = input("\nEnter a prompt: ")
-# Tokenize the input
-inputs = tokenizer(
-    text,
-    return_tensors="pt",
-    truncation=True,
-    padding=True,
-    max_length=128
-)
-# Disable gradient calculation
-with torch.no_grad():
-    outputs = model(**inputs)
+    predictor = PromptInjectionPredictor(model_dir=args.model_dir)
 
-# Convert logits to probabilities
-probabilities = F.softmax(outputs.logits, dim=1)
+    if args.text:
+        result = predictor.predict_text(args.text)
+        print(json.dumps(result, indent=2))
+        return
 
-# Get predicted class
-prediction = torch.argmax(probabilities, dim=1).item()
+    print("Model loaded successfully.")
+    while True:
+        try:
+            text = input("\nEnter a prompt (or 'exit' to quit): ").strip()
+        except EOFError:
+            break
+        if not text or text.lower() == "exit":
+            break
+        result = predictor.predict_text(text)
+        print(json.dumps(result, indent=2))
 
-# Confidence of predicted class
-confidence = probabilities[0][prediction].item() * 100
-# Display result
-if prediction == 0:
-    print("\nPrediction: ✅ Safe Prompt")
-else:
-    print("\nPrediction: 🚨 Prompt Injection")
 
-print(f"Confidence: {confidence:.2f}%")
+if __name__ == "__main__":
+    main()
