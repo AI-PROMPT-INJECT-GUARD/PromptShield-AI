@@ -1,68 +1,58 @@
 """
 inference.py
 -------------
-Loads the trained DistilBERT model (from Member 1's train_model.py,
-saved into saved_model/) and exposes predict() for the FastAPI backend.
-
-label 0 -> Safe Prompt
-label 1 -> Prompt Injection
+Loads the merged prompt injection predictor from the repository root and
+normalizes its output to the FastAPI backend response contract.
 """
 
 import os
-import torch
-import torch.nn.functional as F
-from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
+import sys
+from pathlib import Path
 
-DEFAULT_MODEL_PATH = os.path.join(
-    os.path.dirname(__file__), "..", "..", "saved_model"
-)
-MODEL_PATH = os.getenv("MODEL_PATH", DEFAULT_MODEL_PATH)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-LABELS = {0: "Safe", 1: "Prompt Injection"}
+from ml.predictor import PromptInjectionPredictor
 
-_tokenizer = None
-_model = None
+DEFAULT_MODEL_PATH = PROJECT_ROOT / "saved_model"
+MODEL_PATH = Path(os.getenv("MODEL_PATH", str(DEFAULT_MODEL_PATH)))
+
+LABELS = {
+    "SAFE": "Safe",
+    "PROMPT_INJECTION": "Prompt Injection",
+}
+
+_predictor = None
 
 
-def load_model():
-    global _tokenizer, _model
+def load_model() -> PromptInjectionPredictor:
+    global _predictor
 
-    if _model is not None:
-        return _tokenizer, _model
+    if _predictor is not None:
+        return _predictor
 
-    if not os.path.isdir(MODEL_PATH):
+    if not MODEL_PATH.exists():
         raise FileNotFoundError(
-            f"saved_model folder not found at '{os.path.abspath(MODEL_PATH)}'. "
-            "Ask Member 1 for the saved_model folder (it's too large for GitHub) "
-            "and place it in the project root, or set the MODEL_PATH env var."
+            f"saved_model folder not found at '{MODEL_PATH.resolve()}'. "
+            "Place the trained model assets in the project root or set the MODEL_PATH env var."
         )
 
-    _tokenizer = DistilBertTokenizer.from_pretrained(MODEL_PATH)
-    _model = DistilBertForSequenceClassification.from_pretrained(MODEL_PATH)
-    _model.eval()
-    return _tokenizer, _model
+    _predictor = PromptInjectionPredictor(model_dir=MODEL_PATH)
+    return _predictor
 
 
 def predict(text: str) -> dict:
-    tokenizer, model = load_model()
+    predictor = load_model()
+    result = predictor.predict_text(text)
 
-    inputs = tokenizer(
-        text,
-        return_tensors="pt",
-        truncation=True,
-        padding=True,
-        max_length=128,
-    )
-
-    with torch.no_grad():
-        outputs = model(**inputs)
-
-    probabilities = F.softmax(outputs.logits, dim=1)
-    prediction = torch.argmax(probabilities, dim=1).item()
-    confidence = probabilities[0][prediction].item() * 100
+    label = LABELS.get(result["label"], result["label"])
+    injection_score = float(result.get("injection_score", 0.0))
+    is_injection = result["label"] == "PROMPT_INJECTION"
+    confidence = injection_score * 100 if is_injection else (1.0 - injection_score) * 100
 
     return {
-        "label": LABELS[prediction],
-        "is_injection": bool(prediction == 1),
+        "label": label,
+        "is_injection": is_injection,
         "confidence": round(confidence, 2),
     }
