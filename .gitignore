@@ -19,19 +19,26 @@ env/
 # Logs
 *.log
 
+# Model files
+*.pt
+*.pth
+
 # Training outputs
 results/
 
-# Legacy / large model artifacts
+# Saved model artifacts
 saved_model/*
 !saved_model/metadata.json
 !saved_model/evaluation_report.json
 !saved_model/promptshield_model.joblib
 
-# Legacy archives
+# Model archives
 saved_model.zip
 
-# Generated datasets not needed in commits by default
+# Database
+*.db
+
+# Local datasets and generated artifacts
 dataset/pi_dataset/
 dataset/shomi_dataset/
 dataset/safe_prompts.csv
