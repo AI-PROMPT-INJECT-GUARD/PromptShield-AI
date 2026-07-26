@@ -24,6 +24,7 @@ env/
 # Model Files
 *.pt
 *.pth
+saved_model.zip
 
 # Database
 *.
@@ -34,3 +35,9 @@ __pycache__/
 venv/
 saved_model/
 results/
+
+# Local datasets and generated artifacts
+dataset/pi_dataset/
+dataset/shomi_dataset/
+dataset/safe_prompts.csv
+dataset/processed/train_balanced.csv
