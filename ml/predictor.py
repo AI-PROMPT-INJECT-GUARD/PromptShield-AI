@@ -30,8 +30,9 @@ class PromptInjectionPredictor:
             with metadata_path.open("r", encoding="utf-8") as handle:
                 metadata = json.load(handle)
             self.threshold = float(metadata.get("decision_threshold", self.threshold))
-            model_path = metadata.get("model_path")
-            if model_path:
+            model_filename = Path(metadata.get("model_path", "")).name or "promptshield_model.joblib"
+            model_path = self.model_dir / model_filename
+            if model_path.exists():
                 self.model = joblib.load(model_path)
 
     def match_rule(self, text: str) -> str | None:
