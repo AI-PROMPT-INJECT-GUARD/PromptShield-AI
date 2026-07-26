@@ -14,14 +14,12 @@ import requests
 import streamlit as st
 
 # ---- CONFIG ----
-# When running locally, this points at your local backend.
-# After deploying the backend (Render), replace this with the deployed URL,
-# e.g. "https://promptshield-backend.onrender.com"
-BACKEND_URL = "http://127.0.0.1:8000"
+# Public backend API deployed on Render.
+BACKEND_URL = "https://promptshield-ai.onrender.com"
 
-st.set_page_config(page_title="PromptShield-AI", page_icon="🛡️", layout="centered")
+st.set_page_config(page_title="PromptShield-AI", page_icon="shield", layout="centered")
 
-st.title("🛡️ PromptShield-AI")
+st.title("PromptShield-AI")
 st.caption("AI-powered prompt injection detection and defense system")
 
 # ---- INPUT ----
@@ -33,9 +31,9 @@ prompt = st.text_area(
 
 col1, col2 = st.columns([1, 1])
 with col1:
-    analyze_clicked = st.button("🔍 Analyze Prompt", use_container_width=True)
+    analyze_clicked = st.button("Analyze Prompt", use_container_width=True)
 with col2:
-    history_clicked = st.button("📜 View History", use_container_width=True)
+    history_clicked = st.button("View History", use_container_width=True)
 
 # ---- ANALYZE ----
 if analyze_clicked:
@@ -53,9 +51,9 @@ if analyze_clicked:
                 result = response.json()
 
                 if result["is_injection"]:
-                    st.error(f"🚨 **{result['label']}** detected")
+                    st.error(f"Injection detected: **{result['label']}**")
                 else:
-                    st.success(f"✅ **{result['label']}**")
+                    st.success(f"Safe: **{result['label']}**")
 
                 st.metric("Confidence", f"{result['confidence']}%")
 
@@ -72,7 +70,7 @@ if analyze_clicked:
             except requests.exceptions.ConnectionError:
                 st.error(
                     "Could not connect to the backend. "
-                    "Make sure the FastAPI server is running, or check the BACKEND_URL."
+                    "Check whether the Render backend is available."
                 )
             except Exception as e:
                 st.error(f"Something went wrong: {e}")
@@ -90,7 +88,7 @@ if history_clicked:
             else:
                 st.subheader("Recent Predictions")
                 for r in records:
-                    icon = "🚨" if r["is_injection"] else "✅"
+                    icon = "[Injection]" if r["is_injection"] else "[Safe]"
                     with st.expander(f"{icon} {r['prompt'][:60]}..."):
                         st.write(f"**Label:** {r['label']}")
                         st.write(f"**Confidence:** {r['confidence']}%")
@@ -104,4 +102,4 @@ if history_clicked:
             st.error(f"Something went wrong: {e}")
 
 st.divider()
-st.caption("PromptShield-AI — detects, classifies, and explains prompt injection attacks.")
+st.caption("PromptShield-AI detects, classifies, and explains prompt injection attacks.")
